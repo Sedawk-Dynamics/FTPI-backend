@@ -32,11 +32,14 @@ model User {
   email         String   @unique
   password      String
   role          Role     @default(USER)
+  isActive      Boolean  @default(true)
+  lastLoginAt   DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   profile       Profile?
   memberships   Membership[]
   payments      Payment[]
+  activityLogs  ActivityLog[]
 }
 
 model Profile {
@@ -78,6 +81,7 @@ model Membership {
   approvedAt      DateTime?
   expiresAt       DateTime?
   rejectionReason String?
+  adminNote       String?
   certificateUrl  String?
   payment         Payment?
   createdAt       DateTime         @default(now())
@@ -128,4 +132,19 @@ model SiteSettings {
   key         String @unique
   value       String
   updatedAt   DateTime @updatedAt
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([entity, entityId])
 }
