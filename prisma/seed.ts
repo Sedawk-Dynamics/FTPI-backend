@@ -366,6 +366,16 @@ async function main() {
     createdUsers++;
 
     if (u.membershipStatus) {
+      const existingMembership = await prisma.membership.findFirst({
+        where: { userId: user.id },
+      });
+      if (existingMembership) {
+        console.log(
+          `  [${u.membershipStatus.padEnd(10)}] ${existingMembership.membershipId} · ${u.email} (exists, skipped)`
+        );
+        continue;
+      }
+
       const appliedAt = u.appliedDaysAgo !== undefined ? daysAgo(u.appliedDaysAgo) : new Date();
       const expiresAt =
         u.expiresDays !== undefined

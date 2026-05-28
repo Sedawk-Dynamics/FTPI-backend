@@ -40,11 +40,31 @@ PORT=5000
 | Command | Description |
 | --- | --- |
 | `npm run dev` | Start with nodemon + ts-node |
-| `npm run build` | Compile TypeScript to `dist/` |
+| `npm run build` | Compile server to `dist/` and seed to `dist-seed/` |
 | `npm start` | Run compiled server |
-| `npm run prisma:migrate` | Apply DB migrations |
+| `npm run start:deploy` | Apply migrations, seed, then start (used in production) |
+| `npm run prisma:migrate` | Create/apply migrations (dev only — interactive) |
+| `npm run migrate:deploy` | Apply pending migrations (production, non-interactive) |
 | `npm run prisma:studio` | Open Prisma Studio |
-| `npm run seed` | Seed initial data |
+| `npm run seed` | Seed via ts-node (local) |
+| `npm run seed:prod` | Seed from compiled output (no ts-node) |
+
+`prisma generate` runs automatically via the `postinstall` hook on every install.
+
+## Deployment (Dokploy / Docker)
+
+A multi-stage `Dockerfile` is included. On container start it runs
+`prisma migrate deploy` → `seed:prod` → server (`npm run start:deploy`).
+The seed is idempotent, so restarts/redeploys won't create duplicate data.
+
+In Dokploy:
+
+1. Create an Application pointing at the repo, build type **Dockerfile**, with the
+   build context / base directory set to `backend`.
+2. Set the environment variables listed above (at minimum `DATABASE_URL`,
+   `JWT_SECRET`, `RAZORPAY_*`, `FRONTEND_URL`).
+3. Mount a persistent volume at `/app/uploads` so user uploads and generated
+   certificates survive redeploys.
 
 ## Layout
 

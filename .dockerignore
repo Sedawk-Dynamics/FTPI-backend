@@ -1,0 +1,15 @@
+node_modules
+dist
+dist-seed
+.git
+.env
+.env.*
+!.env.example
+uploads/*
+!uploads/.gitkeep
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.vscode
+.idea
