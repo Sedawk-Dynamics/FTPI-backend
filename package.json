@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc && tsc -p tsconfig.seed.json",
-    "start": "prisma migrate deploy && node dist/server.js",
-    "start:deploy": "prisma migrate deploy && npm run seed:prod && node dist/server.js",
+    "start": "prisma migrate deploy && (node dist-seed/prisma/seed.js || echo 'seed skipped') && node dist/server.js",
+    "start:deploy": "npm start",
     "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
