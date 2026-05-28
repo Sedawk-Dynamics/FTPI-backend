@@ -40,8 +40,10 @@ app.use(cookieParser());
 // Static files - serve uploads
 app.use('/uploads', express.static(path.resolve(config.uploadDir)));
 
-// API routes
+// API routes. Mounted at /api (e.g. http://localhost:5000/api/auth/login) and at
+// the root so a dedicated API subdomain works too (e.g. https://api.ftpi.in/auth/login).
 app.use('/api', routes);
+app.use('/', routes);
 
 // Health check
 app.get('/health', (req, res) => {
