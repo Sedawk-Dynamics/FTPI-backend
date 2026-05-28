@@ -31,7 +31,10 @@ JWT_SECRET=
 JWT_EXPIRES_IN=7d
 RAZORPAY_KEY_ID=
 RAZORPAY_KEY_SECRET=
-CLIENT_URL=http://localhost:3000
+FRONTEND_URL=http://localhost:3000
+# Optional: extra allowed CORS origins (comma-separated). FRONTEND_URL is also allowed.
+# localhost:3000 and https://ftpi.in / https://www.ftpi.in are allowed by default.
+CORS_ORIGINS=
 PORT=5000
 ```
 

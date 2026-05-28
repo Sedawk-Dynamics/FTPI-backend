@@ -16,7 +16,14 @@ app.use(helmet({
 // CORS
 app.use(
   cors({
-    origin: config.frontendUrl,
+    origin(origin, callback) {
+      // Allow non-browser requests (no Origin header) like curl/health checks.
+      if (!origin || config.corsOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
